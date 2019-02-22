@@ -1,0 +1,11 @@
+{
+  "name": "sudoku-solver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/sudoku-solver",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC"
+}
