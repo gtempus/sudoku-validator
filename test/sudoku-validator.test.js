@@ -1,10 +1,10 @@
 const { expect } = require('chai');
-const SudokuSolver = require('../src/sudoku-solver');
+const SudokuValidator = require('../src/sudoku-validator');
 
-describe('Sudoku Solver', () => {
+describe('Sudoku Validator', () => {
   it('returns false if the board is invalid', () => {
     const emptyBoard = [];
-    const solver = new SudokuSolver(emptyBoard);
+    const solver = new SudokuValidator(emptyBoard);
     const result = solver.valid();
     expect(result, 'This board should not be valid').to.be.false;
   });
