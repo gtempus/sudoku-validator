@@ -11,7 +11,20 @@ class Board {
     })(this.boardArray);
   }
 
-  columns() { }
+  columns() {
+    let cols = [];
+    this.boardArray[0].forEach((val, index) => {
+      cols.push(
+        this.boardArray.map((row) => row[index])
+      );
+    });
+
+    return (function* colIter () {
+      for (let col of cols) {
+        yield col;
+      }
+    })();
+  }
 
   cubes() { }
 }
