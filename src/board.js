@@ -5,12 +5,12 @@ class Board {
     this.boardArray = boardArray;
   }
 
-  [ createIterator ] (collection) {
-    return (function* generalIter (collection) {
-      for (let element of collection) {
+  [ createIterator ](collection) {
+    return ((function* generalIter(theCollection) {
+      for (const element of theCollection) {
         yield element;
       }
-    })(collection);
+    })(collection));
   }
 
   rows() {
@@ -18,10 +18,10 @@ class Board {
   }
 
   columns() {
-    let cols = [];
+    const cols = [];
     this.boardArray[0].forEach((val, index) => {
       cols.push(
-        this.boardArray.map((row) => row[index])
+        this.boardArray.map(row => row[index])
       );
     });
 
@@ -29,9 +29,9 @@ class Board {
   }
 
   cells() {
-    let theCells = new Map();
+    const theCells = new Map();
     const offset = Math.sqrt(this.boardArray[0].length);
-    const bucket = (row, col) => offset*Math.floor(row/offset) + Math.floor(col/offset);
+    const bucket = (row, col) => offset * Math.floor(row / offset) + Math.floor(col / offset);
 
     this.boardArray.forEach((row, rowIndex) => {
       row.forEach((val, colIndex) => {
