@@ -1,14 +1,20 @@
+const createIterator = Symbol('createIterator');
+
 class Board {
   constructor(boardArray) {
     this.boardArray = boardArray;
   }
 
-  rows() {
-    return (function* rowIter (board) {
-      for (let row of board) {
-        yield row;
+  [ createIterator ] (collection) {
+    return (function* generalIter (collection) {
+      for (let element of collection) {
+        yield element;
       }
-    })(this.boardArray);
+    })(collection);
+  }
+
+  rows() {
+    return this[createIterator](this.boardArray);
   }
 
   columns() {
@@ -19,14 +25,25 @@ class Board {
       );
     });
 
-    return (function* colIter () {
-      for (let col of cols) {
-        yield col;
-      }
-    })();
+    return this[createIterator](cols);
   }
 
-  cubes() { }
+  cells() {
+    let theCells = new Map();
+    const offset = Math.sqrt(this.boardArray[0].length);
+    const bucket = (row, col) => offset*Math.floor(row/offset) + Math.floor(col/offset);
+
+    this.boardArray.forEach((row, rowIndex) => {
+      row.forEach((val, colIndex) => {
+        const cellBucketKey = bucket(rowIndex, colIndex);
+        const cellBucketValue = theCells.get(cellBucketKey) || [];
+        cellBucketValue.push(val);
+        theCells.set(cellBucketKey, cellBucketValue);
+      });
+    });
+
+    return this[createIterator](theCells.values());
+  }
 }
 
 module.exports = Board;
