@@ -5,13 +5,12 @@ describe('Sudoku Validator', () => {
   it('returns false if the board is invalid', () => {
     const emptyBoard = [];
     const rulesStub = {
-      board: null,
-      areSatisfied: () => false,
+      areSatisfied: (board) => false,
     };
 
-    const solver = new SudokuValidator(emptyBoard, rulesStub);
+    const validator = new SudokuValidator(emptyBoard, rulesStub);
 
-    const result = solver.valid();
+    const result = validator.valid();
     expect(result, 'This board should not be valid').to.be.false;
   });
 
@@ -23,12 +22,11 @@ describe('Sudoku Validator', () => {
       [ 4, 1, 2, 3 ],
     ];
     const rulesStub = {
-      board: null,
-      areSatisfied: () => true,
+      areSatisfied: (board) => true,
     };
 
-    const solver = new SudokuValidator(simpleBoard, rulesStub);
-    const result = solver.valid();
+    const validator = new SudokuValidator(simpleBoard, rulesStub);
+    const result = validator.valid();
     expect(result, 'This board should be valid').to.be.true;
   });
 });
