@@ -1,4 +1,5 @@
 const createIterator = Symbol('createIterator');
+const distributeValues = Symbol('distributeValues');
 
 class Board {
   constructor(boardArray) {
@@ -13,6 +14,18 @@ class Board {
     })(collection));
   }
 
+  [ distributeValues ](row, rowIndex, theCells) {
+    const offset = Math.sqrt(this.boardArray[0].length);
+    const bucket = (theRow, col) => offset * Math.floor(theRow / offset) + Math.floor(col / offset);
+
+    row.forEach((val, colIndex) => {
+      const cellBucketKey = bucket(rowIndex, colIndex);
+      const cellBucketValue = theCells.get(cellBucketKey) || [];
+      cellBucketValue.push(val);
+      theCells.set(cellBucketKey, cellBucketValue);
+    });
+  }
+
   rows() {
     return this[createIterator](this.boardArray);
   }
@@ -20,9 +33,7 @@ class Board {
   columns() {
     const cols = [];
     this.boardArray[0].forEach((val, index) => {
-      cols.push(
-        this.boardArray.map(row => row[index])
-      );
+      cols.push(this.boardArray.map(row => row[index]));
     });
 
     return this[createIterator](cols);
@@ -30,16 +41,8 @@ class Board {
 
   cells() {
     const theCells = new Map();
-    const offset = Math.sqrt(this.boardArray[0].length);
-    const bucket = (row, col) => offset * Math.floor(row / offset) + Math.floor(col / offset);
-
     this.boardArray.forEach((row, rowIndex) => {
-      row.forEach((val, colIndex) => {
-        const cellBucketKey = bucket(rowIndex, colIndex);
-        const cellBucketValue = theCells.get(cellBucketKey) || [];
-        cellBucketValue.push(val);
-        theCells.set(cellBucketKey, cellBucketValue);
-      });
+      this[distributeValues](row, rowIndex, theCells);
     });
 
     return this[createIterator](theCells.values());
